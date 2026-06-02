@@ -1,0 +1,887 @@
+ø<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--bg2:#111;--bg3:#181818;
+  --fg:#e8e8e8;--fg2:#999;--fg3:#555;
+  --acc:#ffffff;--acc2:#c0c0c0;
+  --border:#222;--border2:#333;
+  --green:#39ff14;--green2:#1a7a08;
+  --amber:#f5a623;
+  --mono:'Space Mono',monospace;
+  --sans:'Syne',sans-serif;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--mono);line-height:1.6;min-height:100vh;}
+
+/* NAV */
+nav{display:flex;gap:0;border-bottom:1px solid var(--border2);position:sticky;top:0;background:var(--bg);z-index:100;overflow-x:auto;}
+nav button{background:none;border:none;border-right:1px solid var(--border);color:var(--fg2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+nav button:hover{color:var(--fg);background:var(--bg2);}
+nav button.active{color:var(--green);border-bottom:2px solid var(--green);}
+
+/* SECTIONS */
+.section{display:none;padding:0;animation:fadeIn .3s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{min-height:420px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:48px 40px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,var(--border) 39px,var(--border) 40px);opacity:.3;}
+.glitch{font-family:var(--sans);font-size:clamp(32px,6vw,64px);font-weight:800;letter-spacing:-.02em;color:var(--acc);position:relative;z-index:1;line-height:1;}
+.glitch span{display:inline-block;animation:glitch1 4s infinite;}
+.glitch span:nth-child(2){animation:glitch2 4s infinite .1s;color:var(--fg2);}
+@keyframes glitch1{0%,95%,100%{transform:none;opacity:1}96%{transform:skewX(-8deg) translateX(2px);opacity:.8}97%{transform:skewX(4deg) translateX(-1px);opacity:.9}}
+@keyframes glitch2{0%,95%,100%{transform:none;opacity:0}96%{transform:skewX(-8deg) translateX(2px);opacity:.3}97%{transform:skewX(4deg) translateX(-1px);opacity:.2}}
+.ticker{font-size:11px;color:var(--green);letter-spacing:.2em;margin-top:8px;position:relative;z-index:1;}
+.tagline{font-size:14px;color:var(--fg2);max-width:480px;margin-top:24px;line-height:1.8;position:relative;z-index:1;}
+.hero-stats{display:flex;gap:32px;margin-top:32px;position:relative;z-index:1;}
+.hero-stat label{display:block;font-size:9px;letter-spacing:.15em;color:var(--fg3);text-transform:uppercase;}
+.hero-stat span{font-size:20px;font-weight:700;color:var(--acc);}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);padding:24px;margin-bottom:1px;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);}
+.card-grid .card{margin:0;}
+.card h3{font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:12px;}
+.card p{font-size:12px;color:var(--fg2);line-height:1.8;}
+.card code{font-size:11px;color:var(--green);background:rgba(57,255,20,.07);padding:2px 6px;border-radius:2px;}
+
+/* CODE BLOCKS */
+.code-block{background:#0d0d0d;border:1px solid var(--border2);border-left:3px solid var(--green);padding:20px 24px;margin:16px 0;overflow-x:auto;}
+.code-block pre{font-size:11px;line-height:1.9;color:var(--fg2);}
+.code-block .kw{color:var(--amber);}
+.code-block .fn{color:var(--green);}
+.code-block .cm{color:var(--fg3);}
+.code-block .str{color:#9ecfe8;}
+.code-block .num{color:#b5a0f5;}
+
+/* SECTION TITLES */
+.section-header{padding:32px 40px 0;border-bottom:1px solid var(--border);}
+.section-header h2{font-family:var(--sans);font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--acc);padding-bottom:24px;}
+.section-header p{font-size:12px;color:var(--fg2);max-width:600px;line-height:1.9;padding-bottom:24px;}
+.section-body{padding:0 40px;padding-bottom:40px;}
+.section-body h3{font-family:var(--sans);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);margin:32px 0 12px;padding-top:24px;border-top:1px solid var(--border);}
+.section-body h3:first-child{border-top:none;margin-top:24px;}
+.section-body p{font-size:12px;color:var(--fg2);line-height:1.9;margin-bottom:12px;max-width:680px;}
+.section-body ul{list-style:none;padding:0;}
+.section-body ul li{font-size:12px;color:var(--fg2);padding:4px 0;padding-left:16px;position:relative;}
+.section-body ul li::before{content:'>';position:absolute;left:0;color:var(--green);}
+
+/* TOKENOMICS CHART */
+.supply-bar{height:32px;background:var(--bg3);border:1px solid var(--border);display:flex;overflow:hidden;margin:16px 0;}
+.supply-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:.08em;transition:all .3s;}
+.supply-seg span{mix-blend-mode:difference;color:white;font-weight:700;}
+
+/* MINING STATS */
+.mining-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);margin:16px 0;}
+.mining-stat{background:var(--bg2);padding:20px;text-align:center;}
+.mining-stat .val{font-size:24px;font-weight:700;color:var(--green);}
+.mining-stat .lbl{font-size:9px;color:var(--fg3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px;}
+
+/* SECURITY TABLE */
+.sec-table{width:100%;border-collapse:collapse;margin:16px 0;}
+.sec-table th{text-align:left;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--fg3);padding:8px 12px;border-bottom:1px solid var(--border2);}
+.sec-table td{font-size:11px;padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+.sec-table td:first-child{color:var(--amber);}
+.sec-table td:last-child{color:var(--fg2);}
+.badge{display:inline-block;font-size:9px;letter-spacing:.08em;padding:2px 8px;border-radius:2px;}
+.badge.high{background:rgba(255,60,60,.1);color:#ff3c3c;border:1px solid #ff3c3c44;}
+.badge.med{background:rgba(245,166,35,.1);color:var(--amber);border:1px solid #f5a62344;}
+.badge.ok{background:rgba(57,255,20,.1);color:var(--green);border:1px solid #39ff1444;}
+
+/* HALVING TIMELINE */
+.halving-row{display:flex;align-items:stretch;margin-bottom:1px;}
+.halving-row .epoch{background:var(--bg2);border:1px solid var(--border);padding:16px 20px;min-width:80px;text-align:center;}
+.halving-row .epoch .n{font-size:18px;font-weight:700;color:var(--acc);}
+.halving-row .epoch .lbl{font-size:9px;color:var(--fg3);}
+.halving-row .info{background:var(--bg3);border:1px solid var(--border);border-left:none;padding:16px 20px;flex:1;display:flex;gap:32px;align-items:center;}
+.halving-row .info .field{min-width:120px;}
+.halving-row .info .field .v{font-size:13px;color:var(--green);font-weight:700;}
+.halving-row .info .field .k{font-size:9px;color:var(--fg3);letter-spacing:.1em;text-transform:uppercase;}
+.halving-bar{height:8px;background:var(--border2);flex:1;overflow:hidden;}
+.halving-fill{height:100%;background:var(--green);transition:width .5s;}
+
+/* FOLDER TREE */
+.tree{font-size:11px;line-height:2;padding:16px 0;}
+.tree .dir{color:var(--amber);}
+.tree .file{color:var(--fg2);}
+.tree .cm{color:var(--fg3);}
+
+/* PDA MAP */
+.pda-row{display:flex;align-items:center;gap:0;margin-bottom:1px;}
+.pda-seed{background:var(--bg2);border:1px solid var(--border);padding:10px 16px;font-size:10px;color:var(--green);min-width:220px;font-family:var(--mono);}
+.pda-arrow{padding:0 12px;color:var(--fg3);font-size:14px;}
+.pda-account{background:var(--bg3);border:1px solid var(--border);border-left:none;padding:10px 16px;font-size:10px;color:var(--fg2);flex:1;}
+.pda-purpose{color:var(--fg3);font-size:9px;display:block;margin-top:2px;}
+
+/* INTERACTIVE MINER */
+#miner-sim{background:var(--bg2);border:1px solid var(--border);padding:24px;margin:16px 0;}
+.miner-title{font-family:var(--sans);font-size:16px;font-weight:700;color:var(--acc);margin-bottom:16px;}
+.miner-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;}
+.miner-btn{background:none;border:1px solid var(--border2);color:var(--fg2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:8px 20px;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.miner-btn:hover{border-color:var(--green);color:var(--green);}
+.miner-btn.active{background:rgba(57,255,20,.1);border-color:var(--green);color:var(--green);}
+.miner-output{background:#0a0a0a;border:1px solid var(--border);padding:16px;font-size:10px;line-height:2;color:var(--fg2);height:200px;overflow-y:auto;font-family:var(--mono);}
+.miner-output .hash-line{color:var(--fg3);}
+.miner-output .found{color:var(--green);font-weight:700;}
+.miner-output .err{color:#ff3c3c;}
+.miner-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:1px;}
+.miner-metric{background:var(--bg3);padding:12px;text-align:center;}
+.miner-metric .mv{font-size:16px;color:var(--green);font-weight:700;}
+.miner-metric .mk{font-size:9px;color:var(--fg3);letter-spacing:.1em;text-transform:uppercase;margin-top:2px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <button class="active" onclick="show('vision')">Vision</button>
+  <button onclick="show('architecture')">Architecture</button>
+  <button onclick="show('contracts')">Contracts</button>
+  <button onclick="show('mining')">Mining</button>
+  <button onclick="show('tokenomics')">Tokenomics</button>
+  <button onclick="show('security')">Security</button>
+  <button onclick="show('frontend')">Frontend</button>
+  <button onclick="show('launch')">Launch</button>
+  <button onclick="show('governance')">Governance</button>
+  <button onclick="show('whitepaper')">Whitepaper</button>
+</nav>
+
+<!-- VISION -->
+<div id="vision" class="section active">
+  <div class="hero">
+    <div class="glitch"><span>UNLEARN</span><span>UNLEARN</span></div>
+    <div class="glitch" style="margin-top:4px"><span>LOGIC</span><span>LOGIC</span></div>
+    <div class="ticker">$UNL &nbsp;·&nbsp; SOLANA &nbsp;·&nbsp; SPL TOKEN &nbsp;·&nbsp; FAIR LAUNCH &nbsp;·&nbsp; 21,000,000 SUPPLY</div>
+    <div class="tagline">A community mining protocol where computational participation is the only path to ownership. No insiders. No presale. No authority. Only work.</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><label>Max 
+Supply</label><span>1B</span></div>
+      <div class="hero-stat"><label>Mining Share</label><span>90%</span></div>
+      <div class="hero-stat"><label>Creator Cap</label><span>5%</span></div>
+      <div class="hero-stat"><label>Halvings</label><span>4×</span></div>
+    </div>
+  </div>
+  <div class="section-body">
+    <h3>Protocol Identity</h3>
+    <p>UNLEARNLOGIC is not a speculation vehicle. It is a protocol designed around a single thesis: that computational participation should be the only legitimate claim to token ownership. By modeling Bitcoin's proof-of-work scarcity on Solana's high-throughput infrastructure, UNL creates a mining system that rewards sustained engagement over capital advantage.</p>
+    <p>The artistic layer is not decoration. It is the load-bearing wall. The glitch aesthetic, the terminal philosophy, the ritual of mining — these are signals in a noise-saturated economy. This is a protocol for people who build things, question things, and distrust easy money.</p>
+
+    <h3>Core Principles</h3>
+    <div class="card-grid">
+      <div class="card"><h3>Fair Launch Only</h3><p>Zero pre-mine. Zero insider allocation. Zero VC rounds. The creator treasury is hard-capped at 5% and vests linearly over 24 months via on-chain schedule. Anyone who mines before day 1 mines the same rate as anyone who mines on day 1,000.</p></div>
+      <div class="card"><h3>Computational Scarcity</h3><p>Token emission requires real off-chain hash computation. The protocol validates SHA-256 proofs on-chain. Minting is impossible without work. This is not a staking wrapper. This is not a yield farm. This is mining.</p></div>
+      <div class="card"><h3>Authority Revocation</h3><p>On Day 30 post-launch: mint authority revoked. Freeze authority revoked. Upgrade authority transferred to community multisig. The protocol becomes permanently trustless. No admin keys. No pause switches. No rescue operations.</p></div>
+      <div class="card"><h3>Anti-Extractive Design</h3><p>No MEV extraction from mining submission ordering. Epoch batching means no gas wars. Delayed claim windows prevent flash-bot reward sniping. The game theory rewards patience, not speed or capital.</p></div>
+    </div>
+
+    <h3>Cultural Position</h3>
+    <p>UNLEARNLOGIC exists at the intersection of cypherpunk ethics, net art, and protocol theory. It draws from the Bitcoin whitepaper's elegance, the Ethereum ecosystem's composability thinking, and the anti-algorithmic philosophies of early internet art. The name itself is the thesis: unlearning extractive financial logic as a prerequisite for participation.</p>
+    <p>The mining ritual — running a program that does real computation, waiting epochs, claiming delayed rewards — is intentionally slow. Slow is honest. Slow filters for people who believe in the protocol, not people who found it on a trending list.</p>
+  </div>
+</div>
+
+<!-- ARCHITECTURE -->
+<div id="architecture" class="section">
+  <div class="section-header">
+    <h2>Protocol Architecture</h2>
+    <p>A layered system of Solana programs, PDAs, and epoch-based state machines that implement a verifiable proof-of-work mining protocol entirely on-chain, with minimal trusted infrastructure.</p>
+  </div>
+  <div class="section-body">
+    <h3>System Overview</h3>
+    <div class="card-grid">
+      <div class="card"><h3>Layer 0: SPL Token</h3><p>Standard SPL token with <code>mint_authority</code> held by the Mining Program PDA initially. <code>freeze_authority</code> is null from genesis. Token metadata via Metaplex.</p></div>
+      <div class="card"><h3>Layer 1: Mining Program</h3><p>Anchor program implementing PoW proof validation, epoch management, difficulty adjustment, reward calculation, and claim settlement.</p></div>
+      <div class="card"><h3>Layer 2: Treasury Program</h3><p>Separate Anchor program managing creator vesting, ecosystem grants, and multisig-controlled disbursements via Squads.</p></div>
+      <div class="card"><h3>Layer 3: Governance Program</h3><p>Post-launch DAO transition. Initially a 3-of-5 Squads multisig. Migrates to SPL Governance at community threshold (≥1000 holders, ≥6 months).</p></div>
+    </div>
+
+    <h3>PDA Account Map</h3>
+    <div class="pda-row"><div class="pda-seed">["global_config"]</div><div class="pda-arrow">→</div><div class="pda-account">GlobalConfig<span class="pda-purpose">Protocol parameters: difficulty, epoch length, halving schedule, total minted, paused flag</span></div></div>
+    <div class="pda-row"><div class="pda-seed">["epoch_state", epoch_u64]</div><div class="pda-arrow">→</div><div class="pda-account">EpochState<span class="pda-purpose">Per-epoch: total submissions, valid proofs, reward pool, start/end slot, settled flag</span></div></div>
+    <div class="pda-row"><div class="pda-seed">["miner_state", wallet_pubkey]</div><div class="pda-arrow">→</div><div class="pda-account">MinerState<span class="pda-purpose">Per-wallet: nonce counter, last submission slot, cooldown_until, total earned, claim pending</span></div></div>
+    <div class="pda-row"><div class="pda-seed">["submission", wallet, epoch_u64]</div><div class="pda-arrow">→</div><div class="pda-account">Submission<span class="pda-purpose">Per-epoch per-wallet: best_hash, nonce, submitted_at, reward_share, claimed flag</span></div></div>
+    <div class="pda-row"><div class="pda-seed">["treasury_vesting"]</div><div class="pda-arrow">→</div><div class="pda-account">TreasuryVesting<span class="pda-purpose">Creator + ecosystem allocation: cliff, linear vest schedule, total claimed, authority</span></div></div>
+    <div class="pda-row"><div class="pda-seed">["difficulty_history", window_u8]</div><div class="pda-arrow">→</div><div class="pda-account">DifficultyWindow<span class="pda-purpose">Rolling 8-epoch window of submission counts for LWMA difficulty adjustment</span></div></div>
+
+    <h3>Transaction Flows</h3>
+    <p><strong style="color:var(--acc2)">Mining flow:</strong></p>
+    <div class="code-block"><pre><span class="cm">// 1. Off-chain: miner computes nonce locally</span>
+<span class="fn">hash</span> = SHA256(wallet_pubkey || epoch_id || nonce || challenge_seed)
+<span class="cm">// 2. Validate difficulty target met</span>
+<span class="kw">assert</span> hash.leading_zeros() >= current_difficulty
+
+<span class="cm">// 3. Submit proof on-chain (1 tx)</span>
+<span class="fn">submit_proof</span>({
+  nonce: u64,
+  hash: [u8; 32],
+  epoch_pda: Pubkey,
+  miner_state_pda: Pubkey,
+})
+
+<span class="cm">// 4. Program validates:</span>
+<span class="cm">//    - cooldown window passed (anti-spam)</span>
+<span class="cm">//    - hash recomputed on-chain matches</span>
+<span class="cm">//    - leading zeros >= difficulty</span>
+<span class="cm">//    - nonce not previously used (replay protection)</span>
+<span class="cm">//    - epoch still open</span>
+<span class="cm">//    - updates MinerState, EpochState</span>
+
+<span class="cm">// 5. After epoch close: calculate_epoch_rewards (1 tx)</span>
+<span class="cm">// 6. After claim window: claim_rewards (1 tx per wallet)</span></pre></div>
+
+    <h3>Epoch State Machine</h3>
+    <div class="code-block"><pre><span class="cm">States: OPEN → SETTLING → CLAIMABLE → EXPIRED</span>
+
+OPEN       (slots 0 → EPOCH_LENGTH)
+           Submissions accepted, difficulty enforced
+
+SETTLING   (slots EPOCH_LENGTH → EPOCH_LENGTH + SETTLE_WINDOW)
+           No new submissions. Reward shares calculated.
+           Challenge seed for next epoch derived from
+           final slot hash XOR submission merkle root.
+
+CLAIMABLE  (slots SETTLE_WINDOW → SETTLE_WINDOW + CLAIM_WINDOW)
+           Miners call claim_rewards() to receive tokens.
+           Unclaimed rewards roll into ecosystem treasury.
+
+EXPIRED    Any unclaimed after CLAIM_WINDOW
+           Permanently inaccessible. Deflationary effect.</pre></div>
+  </div>
+</div>
+
+<!-- CONTRACTS -->
+<div id="contracts" class="section">
+  <div class="section-header">
+    <h2>Smart Contracts</h2>
+    <p>Anchor framework Rust programs. Production-grade architecture with full account validation, constraint checks, and reentrancy-safe patterns.</p>
+  </div>
+  <div class="section-body">
+    <h3>Folder Structure</h3>
+    <div class="code-block"><pre class="tree">
+<span class="dir">programs/</span>
+├── <span class="dir">unlearn-mining/</span>
+│   ├── <span class="dir">src/</span>
+│   │   ├── <span class="file">lib.rs</span>              <span class="cm">// Program entrypoint, declare_id!</span>
+│   │   ├── <span class="dir">instructions/</span>
+│   │   │   ├── <span class="file">initialize.rs</span>    <span class="cm">// Bootstrap GlobalConfig, mint</span>
+│   │   │   ├── <span class="file">start_epoch.rs</span>   <span class="cm">// Open new EpochState</span>
+│   │   │   ├── <span class="file">submit_proof.rs</span>  <span class="cm">// Core mining submission</span>
+│   │   │   ├── <span class="file">settle_epoch.rs</span>  <span class="cm">// Close epoch, compute shares</span>
+│   │   │   ├── <span class="file">claim_rewards.rs</span> <span class="cm">// Mint UNL to miner ATA</span>
+│   │   │   └── <span class="file">adjust_diff.rs</span>   <span class="cm">// LWMA difficulty update</span>
+│   │   ├── <span class="dir">state/</span>
+│   │   │   ├── <span class="file">global_config.rs</span>
+│   │   │   ├── <span class="file">epoch_state.rs</span>
+│   │   │   ├── <span class="file">miner_state.rs</span>
+│   │   │   └── <span class="file">submission.rs</span>
+│   │   ├── <span class="file">errors.rs</span>
+│   │   └── <span class="file">constants.rs</span>
+│   └── <span class="file">Cargo.toml</span>
+├── <span class="dir">unlearn-treasury/</span>
+│   └── <span class="dir">src/</span>
+│       ├── <span class="file">lib.rs</span>
+│       └── <span class="dir">instructions/</span>
+│           ├── <span class="file">init_vesting.rs</span>
+│           └── <span class="file">release_vested.rs</span>
+<span class="dir">app/</span>
+├── <span class="dir">miner/</span>            <span class="cm">// Browser + CLI miner</span>
+└── <span class="dir">dashboard/</span>        <span class="cm">// Next.js frontend</span></pre></div>
+
+    <h3>GlobalConfig State</h3>
+    <div class="code-block"><pre><span class="kw">#[account]</span>
+<span class="kw">pub struct</span> <span class="fn">GlobalConfig</span> {
+    <span class="kw">pub</span> authority: Pubkey,          <span class="cm">// multisig after launch</span>
+    <span class="kw">pub</span> mint: Pubkey,               <span class="cm">// UNL SPL mint</span>
+    <span class="kw">pub</span> current_epoch: u64,
+    <span class="kw">pub</span> current_difficulty: u8,     <span class="cm">// leading zero bits required</span>
+    <span class="kw">pub</span> epoch_length_slots: u64,    <span class="cm">// ~2 hours = ~18000 slots</span>
+    <span class="kw">pub</span> settle_window_slots: u64,   <span class="cm">// ~30 min = ~4500 slots</span>
+    <span class="kw">pub</span> claim_window_slots: u64,    <span class="cm">// ~7 days = ~604800 slots</span>
+    <span class="kw">pub</span> total_minted: u64,          <span class="cm">// lamport precision (6 dec)</span>
+    <span class="kw">pub</span> max_supply: u64,            <span class="cm">// 21_000_000 * 10^6</span>
+    <span class="kw">pub</span> halving_interval: u64,      <span class="cm">// epochs per halving = 210</span>
+    <span class="kw">pub</span> base_reward_per_epoch: u64, <span class="cm">// initial: 50 UNL</span>
+    <span class="kw">pub</span> cooldown_slots: u64,        <span class="cm">// per-wallet submission gap</span>
+    <span class="kw">pub</span> submission_cap: u16,        <span class="cm">// max submissions per epoch</span>
+    <span class="kw">pub</span> paused: bool,               <span class="cm">// emergency only, pre-decentralization</span>
+    <span class="kw">pub</span> bump: u8,
+}</pre></div>
+
+    <h3>submit_proof Instruction (Core Logic)</h3>
+    <div class="code-block"><pre><span class="kw">pub fn</span> <span class="fn">submit_proof</span>(
+    ctx: Context&lt;SubmitProof&gt;,
+    nonce: u64,
+    hash_bytes: [u8; 32],
+) -&gt; Result&lt;()&gt; {
+    <span class="cm">// 1. Check paused</span>
+    require!(!config.paused, ErrorCode::ProtocolPaused);
+
+    <span class="cm">// 2. Epoch open</span>
+    let slot = Clock::get()?.slot;
+    require!(slot &lt; epoch.end_slot, ErrorCode::EpochClosed);
+
+    <span class="cm">// 3. Cooldown check (Sybil/spam resistance)</span>
+    require!(
+        slot &gt;= miner.cooldown_until,
+        ErrorCode::CooldownActive
+    );
+
+    <span class="cm">// 4. Replay protection: nonce must be > last_nonce</span>
+    require!(nonce &gt; miner.last_nonce, ErrorCode::NonceReplay);
+
+    <span class="cm">// 5. Reconstruct hash on-chain (CRITICAL: no trust in client)</span>
+    let mut data = Vec::with_capacity(80);
+    data.extend_from_slice(ctx.accounts.miner.key.as_ref());
+    data.extend_from_slice(&amp;config.current_epoch.to_le_bytes());
+    data.extend_from_slice(&amp;nonce.to_le_bytes());
+    data.extend_from_slice(&amp;epoch.challenge_seed);
+    let computed = solana_program::hash::hash(&amp;data);
+    require!(computed.to_bytes() == hash_bytes, ErrorCode::HashMismatch);
+
+    <span class="cm">// 6. Difficulty check: count leading zero bits</span>
+    let zeros = count_leading_zero_bits(&amp;hash_bytes);
+    require!(zeros &gt;= config.current_difficulty, ErrorCode::InsufficientWork);
+
+    <span class="cm">// 7. Update state</span>
+    miner.last_nonce = nonce;
+    miner.cooldown_until = slot + config.cooldown_slots;
+    miner.last_submission_slot = slot;
+    epoch.total_submissions += 1;
+    <span class="cm">// Store hash quality score for reward share calculation</span>
+    submission.best_score = zeros as u64;
+    submission.submitted_at = slot;
+
+    Ok(())
+}</pre></div>
+
+    <h3>Reward Calculation</h3>
+    <div class="code-block"><pre><span class="cm">// Epoch reward pool after halving</span>
+halving_n = current_epoch / HALVING_INTERVAL
+epoch_pool = BASE_REWARD * (1/2)^halving_n
+
+<span class="cm">// Per-miner share: weighted by proof quality (leading zeros)</span>
+<span class="cm">// Uses quadratic scoring to reduce winner-take-all dynamics</span>
+miner_score = miner.best_zeros^2
+total_score = sum(all valid miner scores in epoch)
+miner_reward = epoch_pool * (miner_score / total_score)
+
+<span class="cm">// Max supply safety</span>
+if config.total_minted + miner_reward > config.max_supply {
+    miner_reward = config.max_supply - config.total_minted
+}</pre></div>
+  </div>
+</div>
+
+<!-- MINING -->
+<div id="mining" class="section">
+  <div class="section-header">
+    <h2>Mining System</h2>
+    <p>Custom proof-of-work protocol operating on Solana. Hash computation happens off-chain; validation and settlement happen on-chain. Three miner implementations: browser, CLI, desktop.</p>
+  </div>
+  <div class="section-body">
+    <div id="miner-sim">
+      <div class="miner-title">// MINER SIMULATION</div>
+      <div class="miner-controls">
+        <button class="miner-btn" id="btn-start" onclick="startMiner()">[ Start Mining ]</button>
+        <button class="miner-btn" onclick="stopMiner()">[ Stop ]</button>
+        <button class="miner-btn" onclick="claimSim()">[ Claim Rewards ]</button>
+      </div>
+      <div class="miner-output" id="miner-out">
+        <div style="color:var(--fg3)">// UNLEARNLOGIC v0.1.0 — browser miner</div>
+        <div style="color:var(--fg3)">// connect wallet to begin</div>
+        <div style="color:var(--fg3)">// difficulty: 20 leading zero bits</div>
+        <div style="color:var(--fg3)">// epoch 1 open — 17,842 slots remaining</div>
+        <div>&nbsp;</div>
+        <div>waiting for start command...</div>
+      </div>
+      <div class="miner-metrics">
+        <div class="miner-metric"><div class="mv" id="m-hashrate">0</div><div class="mk">H/s</div></div>
+        <div class="miner-metric"><div class="mv" id="m-attempts">0</div><div class="mk">Attempts</div></div>
+        <div class="miner-metric"><div class="mv" id="m-found">0</div><div class="mk">Proofs Found</div></div>
+        <div class="miner-metric"><div class="mv" id="m-pending">0.00</div><div class="mk">UNL Pending</div></div>
+      </div>
+    </div>
+
+    <h3>Difficulty Adjustment (LWMA)</h3>
+    <p>Linear Weighted Moving Average algorithm. Faster response than Bitcoin's 2016-block window. Targets a fixed number of valid submissions per epoch.</p>
+    <div class="code-block"><pre><span class="cm">// Linearly Weighted Moving Average — 8-epoch window</span>
+TARGET_SUBMISSIONS_PER_EPOCH = 144
+
+<span class="kw">fn</span> <span class="fn">adjust_difficulty</span>(window: [EpochStats; 8]) -> u8 {
+    let weighted_sum: f64 = window.iter().enumerate()
+        .map(|(i, e)| (i+1) as f64 * e.valid_submissions as f64)
+        .sum();
+    let weight_total: f64 = (1..=8).sum::&lt;u64&gt;() as f64;
+    let lwma = weighted_sum / weight_total;
+
+    let ratio = TARGET / lwma;
+    <span class="cm">// Clamp adjustment to ±2 bits per epoch</span>
+    let delta = (ratio.ln() / 2.0f64.ln()).round().clamp(-2.0, 2.0);
+    (current_difficulty as i8 + delta as i8).clamp(16, 40) as u8
+}
+
+<span class="cm">// Minimum difficulty: 16 bits (~65536 expected hashes)</span>
+<span class="cm">// Maximum difficulty: 40 bits (extremely competitive)</span>
+<span class="cm">// Starting difficulty: 20 bits (~1M expected hashes)</span></pre></div>
+
+    <h3>Halving Schedule</h3>
+    <div id="halving-table">
+      <div class="halving-row">
+        <div class="epoch"><div class="n">1-210</div><div class="lbl">EPOCH</div></div>
+        <div class="info">
+          <div class="field"><div class="v">50 UNL</div><div class="k">Per Epoch</div></div>
+          <div class="field"><div class="v">10,500</div><div class="k">Total UNL</div></div>
+          <div class="field"><div class="v">~1yr</div><div class="k">Duration</div></div>
+          <div class="halving-bar"><div class="halving-fill" style="width:100%"></div></div>
+        </div>
+      </div>
+      <div class="halving-row">
+        <div class="epoch"><div class="n">211-420</div><div class="lbl">EPOCH</div></div>
+        <div class="info">
+          <div class="field"><div class="v">25 UNL</div><div class="k">Per Epoch</div></div>
+          <div class="field"><div class="v">5,250</div><div class="k">Total UNL</div></div>
+          <div class="field"><div class="v">~1yr</div><div class="k">Duration</div></div>
+          <div class="halving-bar"><div class="halving-fill" style="width:50%"></div></div>
+        </div>
+      </div>
+      <div class="halving-row">
+        <div class="epoch"><div class="n">421-630</div><div class="lbl">EPOCH</div></div>
+        <div class="info">
+          <div class="field"><div class="v">12.5 UNL</div><div class="k">Per Epoch</div></div>
+          <div class="field"><div class="v">2,625</div><div class="k">Total UNL</div></div>
+          <div class="field"><div class="v">~1yr</div><div class="k">Duration</div></div>
+          <div class="halving-bar"><div class="halving-fill" style="width:25%"></div></div>
+        </div>
+      </div>
+      <div class="halving-row">
+        <div class="epoch"><div class="n">631-840</div><div class="lbl">EPOCH</div></div>
+        <div class="info">
+          <div class="field"><div class="v">6.25 UNL</div><div class="k">Per Epoch</div></div>
+          <div class="field"><div class="v">1,312</div><div class="k">Total UNL</div></div>
+          <div class="field"><div class="v">~1yr</div><div class="k">Duration</div></div>
+          <div class="halving-bar"><div class="halving-fill" style="width:12.5%"></div></div>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:16px">Note: epoch-based UNL above represents mining pool only (90% of 21M = 18.9M total). Remaining halvings continue until max supply approached asymptotically. Final emissions tail terminates at max_supply hard cap enforced in-program.</p>
+
+    <h3>Anti-Bot Design</h3>
+    <div class="card-grid">
+      <div class="card"><h3>Dynamic Challenge Seed</h3><p>Each epoch's valid challenge seed is derived from <code>XOR(last_slot_hash, submission_merkle_root)</code>. Unpredictable until epoch opens. Cannot be pre-computed by bots before epoch start.</p></div>
+      <div class="card"><h3>Per-Wallet Cooldown</h3><p>Minimum <code>cooldown_slots</code> (default: 900, ~6 min) between any two submissions from the same wallet. Enforced in <code>MinerState.cooldown_until</code>.</p></div>
+      <div class="card"><h3>Submission Cap</h3><p>Maximum <code>submission_cap</code> valid submissions accepted per epoch globally. After cap reached, epoch enters early settlement. Prevents flooding with low-cost proof spam.</p></div>
+      <div class="card"><h3>Quadratic Share Weighting</h3><p>Reward shares weighted by <code>score²</code> (score = leading zero count above minimum). Better proofs earn more, but marginal returns diminish. GPU farms have diminishing advantage over efficient CPUs.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOKENOMICS -->
+<div id="tokenomics" class="section">
+  <div class="section-header">
+    <h2>Tokenomics</h2>
+    <p>Fixed supply. No inflation. Deflationary by design. Unclaimed epoch rewards are permanently burned (not redistributed), accelerating scarcity over time.</p>
+  </div>
+  <div class="section-body">
+    <h3>Supply Distribution</h3>
+    <div class="supply-bar">
+      <div class="supply-seg" style="width:90%;background:#1a3a1a;border-right:1px solid var(--green)"><span>90% Mining</span></div>
+      <div class="supply-seg" style="width:5%;background:#2a1f00;border-right:1px solid var(--amber)"><span></span></div>
+      <div class="supply-seg" style="width:5%;background:#0d1a2a"><span></span></div>
+    </div>
+    <div style="display:flex;gap:24px;font-size:11px;margin-bottom:16px;">
+      <span><span style="color:var(--green)">█</span> 90% Mining Rewards (18,900,000 UNL)</span>
+      <span><span style="color:var(--amber)">█</span> 5% Creator Treasury (1,050,000 UNL)</span>
+      <span style="color:var(--fg2)">█ 5% Ecosystem Grants (1,050,000 UNL)</span>
+    </div>
+
+    <div class="mining-grid">
+      <div class="mining-stat"><div class="val">21,000,000</div><div class="lbl">Hard Cap Supply</div></div>
+      <div class="mining-stat"><div class="val">18,900,000</div><div class="lbl">Mining Emissions</div></div>
+      <div class="mining-stat"><div class="val">24 months</div><div class="lbl">Creator Vest</div></div>
+      <div class="mining-stat"><div class="val">~4 years</div><div class="lbl">to 50% supply</div></div>
+    </div>
+
+    <h3>Emission Schedule</h3>
+    <div class="code-block"><pre><span class="cm">// Epoch-based emission (epoch ≈ 2 hours)</span>
+Epochs per year: ~4,380
+Halving every:   210 epochs (~20 days initially)
+
+<span class="cm">// Note: 210 epoch halving chosen for rapid early distribution</span>
+<span class="cm">// balancing accessibility vs scarcity. Adjust in GlobalConfig</span>
+<span class="cm">// before deployment based on community consensus.</span>
+
+Year 1 (epochs 1-210):   50 UNL × 210 = 10,500 UNL/halving-period
+Year 1 (epochs 211-420): 25 UNL × 210 =  5,250 UNL/halving-period
+...continues until max supply asymptotically approached
+
+<span class="cm">// Treasury vesting (separate from mining)</span>
+Creator:   1,050,000 UNL linear vest, 6-month cliff, 24-month total
+Ecosystem: 1,050,000 UNL multisig-controlled, proposal-gated releases</pre></div>
+
+    <h3>Deflationary Mechanics</h3>
+    <ul>
+      <li>Unclaimed rewards after CLAIM_WINDOW are permanently inaccessible (no redistribution)</li>
+      <li>Protocol fees (if ever introduced via governance) go to ecosystem treasury, not inflation</li>
+      <li>No token burn function intentionally — supply reduction happens through inaction, not destruction</li>
+      <li>Max supply is a hard on-chain constraint, not a social contract</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SECURITY -->
+<div id="security" class="section">
+  <div class="section-header">
+    <h2>Security Architecture</h2>
+    <p>Multi-layered defense covering replay attacks, Sybil resistance, economic exploits, and program-level vulnerabilities. Pre-launch audit required.</p>
+  </div>
+  <div class="section-body">
+    <h3>Threat Matrix</h3>
+    <table class="sec-table">
+      <tr><th>Attack Vector</th><th>Severity</th><th>Mitigation</th></tr>
+      <tr><td>Hash replay — same proof submitted twice</td><td><span class="badge high">HIGH</span></td><td>Nonce monotonicity (last_nonce tracking in MinerState). On-chain hash recomputation invalidates any tampered proof. PDA-keyed per (wallet × epoch) prevents cross-epoch replay.</td></tr>
+      <tr><td>Multiple wallets per entity (Sybil)</td><td><span class="badge high">HIGH</span></td><td>Cooldown per wallet limits throughput per key. Quadratic scoring means diminishing returns across wallets. No KYC — accepted tradeoff. Wallet age weighting optional via governance.</td></tr>
+      <tr><td>Bot flooding — automated submission spam</td><td><span class="badge med">MED</span></td><td>Submission cap per epoch. Dynamic challenge seed unpredictable until epoch open. Cooldown slots (900 slots ≈ 6 min per wallet). SOL rent cost per MinerState PDA.</td></tr>
+      <tr><td>Reward double-claim</td><td><span class="badge high">HIGH</span></td><td>Submission.claimed boolean set atomically with mint instruction. Anchor account constraints prevent re-initialization. All state mutations in single CPI.</td></tr>
+      <tr><td>Fake proof — client-side hash cheating</td><td><span class="badge high">HIGH</span></td><td>Hash RECOMPUTED on-chain from submitted nonce. Client cannot forge. Solana's native hash function used — same as off-chain SHA256 computation.</td></tr>
+      <tr><td>MEV / front-running submissions</td><td><span class="badge med">MED</span></td><td>Epoch settlement is not order-dependent. Reward shares calculated after epoch closes, not on submission order. No incentive to front-run.</td></tr>
+      <tr><td>Mint authority exploit</td><td><span class="badge high">HIGH</span></td><td>Mint authority held by program PDA (not EOA). Authority revoked Day 30 — max_supply becomes permanently enforced by missing authority, not program logic alone.</td></tr>
+      <tr><td>Emergency abuse / pause centralization</td><td><span class="badge med">MED</span></td><td>Pause flag only in GlobalConfig. Authority migrates to Squads multisig before launch. Pause capability removed entirely at DAO transition (upgrade authority burned).</td></tr>
+      <tr><td>Integer overflow in reward math</td><td><span class="badge high">HIGH</span></td><td>Rust checked arithmetic throughout (overflow = panic). u128 used for intermediate reward calculations. Explicit bounds on all user-controlled integers.</td></tr>
+    </table>
+
+    <h3>Audit Checklist</h3>
+    <ul>
+      <li>All account discriminators verified in Anchor constraints</li>
+      <li>PDA bump seeds stored and verified on every instruction</li>
+      <li>No raw system_program::transfer — only SPL token CPI</li>
+      <li>No instruction data that exceeds compute budget</li>
+      <li>Clock::get() used (not deprecated sysvar_clock)</li>
+      <li>All arithmetic: checked_add, checked_mul, saturating operations</li>
+      <li>Reentrancy: no CPI back to self. All state mutations before external CPIs</li>
+      <li>No uninitialized memory access patterns</li>
+      <li>Event logging on all state-changing instructions (for off-chain indexing)</li>
+      <li>Fuzz testing with honggfuzz-rs on all instruction handlers</li>
+      <li>Invariant: total_minted <= max_supply enforced at claim time</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FRONTEND -->
+<div id="frontend" class="section">
+  <div class="section-header">
+    <h2>Frontend Architecture</h2>
+    <p>Next.js 14 App Router. Terminal aesthetic. Three primary surfaces: landing, mining dashboard, and community portal.</p>
+  </div>
+  <div class="section-body">
+    <h3>App Structure</h3>
+    <div class="code-block"><pre class="tree">
+<span class="dir">app/</span>
+├── <span class="dir">dashboard/</span>         <span class="cm">// Mining dashboard (wallet-gated)</span>
+├── <span class="dir">tokenomics/</span>        <span class="cm">// Supply visualization</span>
+├── <span class="dir">whitepaper/</span>        <span class="cm">// Full protocol spec</span>
+├── <span class="dir">community/</span>         <span class="cm">// Leaderboard + epoch history</span>
+├── <span class="file">page.tsx</span>           <span class="cm">// Landing page</span>
+└── <span class="file">layout.tsx</span>         <span class="cm">// Root: fonts, wallet provider</span>
+
+<span class="dir">components/</span>
+├── <span class="file">MinerPanel.tsx</span>     <span class="cm">// Start/stop, hash display</span>
+├── <span class="file">EpochClock.tsx</span>     <span class="cm">// Live epoch countdown</span>
+├── <span class="file">DifficultyMeter.tsx</span>
+├── <span class="file">RewardClaim.tsx</span>
+├── <span class="file">Leaderboard.tsx</span>
+└── <span class="file">WalletConnect.tsx</span>  <span class="cm">// Phantom/Backpack/Solflare</span>
+
+<span class="dir">lib/</span>
+├── <span class="file">program.ts</span>         <span class="cm">// Anchor client + IDL</span>
+├── <span class="file">miner-worker.ts</span>    <span class="cm">// Web Worker for hashing</span>
+└── <span class="file">epoch.ts</span>           <span class="cm">// Epoch math + slot calc</span></pre></div>
+
+    <h3>Browser Miner (Web Worker)</h3>
+    <div class="code-block"><pre><span class="cm">// miner-worker.ts — runs in Web Worker thread</span>
+<span class="kw">self.onmessage</span> = ({ data: { wallet, epoch, difficulty, seed } }) => {
+    <span class="kw">let</span> nonce = <span class="num">0n</span>;
+    <span class="kw">let</span> hashRate = <span class="num">0</span>;
+    <span class="kw">const</span> start = performance.now();
+
+    <span class="kw">while</span> (running) {
+        <span class="kw">const</span> input = <span class="fn">encode</span>(wallet, epoch, nonce, seed);
+        <span class="kw">const</span> hash = <span class="fn">sha256</span>(input);  <span class="cm">// wasm-crypto</span>
+        <span class="kw">const</span> zeros = <span class="fn">countLeadingZeroBits</span>(hash);
+
+        <span class="kw">if</span> (zeros >= difficulty) {
+            <span class="fn">postMessage</span>({ type: <span class="str">'PROOF_FOUND'</span>, nonce, hash });
+            <span class="kw">break</span>;
+        }
+
+        nonce++;
+        <span class="cm">// Report hashrate every 10k attempts</span>
+        <span class="kw">if</span> (nonce % <span class="num">10000n</span> === <span class="num">0n</span>) {
+            hashRate = <span class="num">10000</span> / ((performance.now() - start) / <span class="num">1000</span>);
+            <span class="fn">postMessage</span>({ type: <span class="str">'STATS'</span>, hashRate, nonce });
+        }
+    }
+};</pre></div>
+
+    <h3>Mining Dashboard Layout</h3>
+    <div class="card-grid">
+      <div class="card"><h3>Epoch Status</h3><p>Live countdown in slots and estimated minutes. Current epoch number, open/settling/claimable state badge. Next epoch challenge seed preview (last 8 bytes).</p></div>
+      <div class="card"><h3>Mining Controls</h3><p>Start/Stop button. Thread count selector (1-4 Web Workers). Real-time hash rate display. Current difficulty indicator (bit count + visual bar).</p></div>
+      <div class="card"><h3>Your Stats</h3><p>Best proof this epoch (leading zeros). Estimated reward share (%). Pending claimable rewards. Historical claim list with tx links.</p></div>
+      <div class="card"><h3>Global Stats</h3><p>Total submissions this epoch. Active miners (unique wallets). Network hash rate estimate. Leaderboard top 10 this epoch.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- LAUNCH -->
+<div id="launch" class="section">
+  <div class="section-header">
+    <h2>Launch Sequence</h2>
+    <p>Mainnet deployment is a one-way door. Each step is irreversible. Audit first. Test exhaustively. Then commit.</p>
+  </div>
+  <div class="section-body">
+    <h3>Pre-Launch Checklist</h3>
+    <div class="code-block"><pre><span class="cm">PHASE 0: PREPARATION</span>
+[ ] Program audit completed (2 independent firms minimum)
+[ ] All findings resolved or accepted with community vote
+[ ] Devnet testing: 30+ epochs simulated
+[ ] CLI miner tested: Linux, macOS, Windows
+[ ] Browser miner tested: Chrome, Firefox, Brave
+[ ] Squads multisig configured (3-of-5, keys held by doxxed community leads)
+[ ] Legal review of token structure in operating jurisdictions
+[ ] Token metadata prepared (name, symbol, logo, description, social links)
+
+<span class="cm">PHASE 1: DEVNET DEPLOYMENT</span>
+[ ] Deploy unlearn-mining program to devnet
+[ ] Deploy unlearn-treasury program to devnet
+[ ] Initialize GlobalConfig with devnet parameters
+[ ] Create SPL mint, assign mint authority to program PDA
+[ ] Run 10 epochs with real miner clients
+[ ] Verify difficulty adjustment behavior
+[ ] Verify halving schedule math
+[ ] Verify claim flow end-to-end
+[ ] Verify replay protection (attempt double-submit)
+[ ] Verify cooldown enforcement
+
+<span class="cm">PHASE 2: MAINNET DEPLOYMENT</span>
+[ ] Deploy programs to mainnet with immutable upgrade authority <span class="str">(NOT YET)</span>
+[ ] Initialize token: UNL, 6 decimals, null freeze_authority
+[ ] Set Metaplex metadata on-chain
+[ ] Announce program IDs publicly
+[ ] Open Epoch 1
+
+<span class="cm">PHASE 3: POST-LAUNCH (DAY 30)</span>
+[ ] Revoke mint_authority → program PDA
+[ ] Verify no mint possible outside program
+[ ] Transfer program upgrade authority → Squads multisig
+[ ] Community announcement of full decentralization
+
+<span class="cm">PHASE 4: DAO TRANSITION (≥6 months, ≥1000 holders)</span>
+[ ] Deploy SPL Governance program
+[ ] Migrate Squads multisig authority to DAO
+[ ] Burn upgrade authority (optional, community vote)</pre></div>
+  </div>
+</div>
+
+<!-- GOVERNANCE -->
+<div id="governance" class="section">
+  <div class="section-header">
+    <h2>Governance Model</h2>
+    <p>Progressive decentralization. Starts with a trusted multisig, ends with on-chain governance. The goal is to make the founders irrelevant.</p>
+  </div>
+  <div class="section-body">
+    <h3>Phase 1: Multisig (Launch → Month 6)</h3>
+    <p>3-of-5 Squads multisig. Signers are publicly identified community members. Powers: emergency pause, parameter adjustment (within bounds), ecosystem grant approval. Cannot: mint tokens, override mining logic, change max supply.</p>
+
+    <h3>Phase 2: Hybrid (Month 6 → Year 1)</h3>
+    <p>SPL Governance deployed. UNL holders vote on proposals. Multisig retains veto on security-critical actions with 48h timelock. Any parameter change requires 72h on-chain vote with ≥5% quorum of circulating supply.</p>
+
+    <h3>Phase 3: Full DAO (Year 1+)</h3>
+    <p>Multisig veto power removed. All program changes require governance votes. Upgrade authority burned or held in governance-controlled PDA. Creator treasury fully vested, creator retires from governance role.</p>
+
+    <h3>Ecosystem Treasury Governance</h3>
+    <ul>
+      <li>Grants require formal proposal + community vote</li>
+      <li>Max single grant: 50,000 UNL without super-majority</li>
+      <li>All disbursements published on-chain with linked proposal</li>
+      <li>Treasury held in Squads multisig, migrates to governance-controlled PDA</li>
+    </ul>
+
+    <h3>Protocol Parameters (Adjustable via Governance)</h3>
+    <div class="code-block"><pre><span class="cm">// Can be changed via governance vote + 72h timelock</span>
+epoch_length_slots    <span class="cm">// default 18000 (~2hr)</span>
+cooldown_slots        <span class="cm">// default 900 (~6min)</span>
+submission_cap        <span class="cm">// default 144/epoch</span>
+target_submissions    <span class="cm">// for difficulty LWMA</span>
+
+<span class="cm">// IMMUTABLE — cannot be changed by governance or anyone</span>
+max_supply            <span class="cm">// 21,000,000 UNL — forever</span>
+halving_interval      <span class="cm">// 210 epochs — forever</span>
+base_reward           <span class="cm">// 50 UNL — forever</span>
+treasury_allocation   <span class="cm">// 5% creator / 5% ecosystem — forever</span></pre></div>
+  </div>
+</div>
+
+<!-- WHITEPAPER -->
+<div id="whitepaper" class="section">
+  <div class="section-header">
+    <h2>Whitepaper Structure</h2>
+    <p>Document framework for the full protocol specification. Each section is a separate Markdown document, assembled into a versioned PDF and deployed to IPFS at launch.</p>
+  </div>
+  <div class="section-body">
+    <div class="code-block"><pre>
+<span class="fn">UNLEARNLOGIC PROTOCOL</span>
+<span class="fn">Version 0.1 — Genesis Draft</span>
+
+<span class="cm">1. ABSTRACT</span>
+   1.1 Thesis
+   1.2 Problem: Plutocratic Token Distribution
+   1.3 Solution: Proof-of-Participation Mining
+   1.4 Contribution to Solana Ecosystem
+
+<span class="cm">2. PRIOR ART</span>
+   2.1 Bitcoin's Proof-of-Work
+   2.2 Programmatic PoW on EVM (PoW tokens)
+   2.3 Fair Launch History
+   2.4 Why Solana
+
+<span class="cm">3. PROTOCOL SPECIFICATION</span>
+   3.1 Token Parameters
+   3.2 Epoch Model
+   3.3 Mining Hash Function
+   3.4 Proof Validation
+   3.5 Difficulty Adjustment (LWMA formal definition)
+   3.6 Reward Distribution Formula
+   3.7 Halving Schedule
+   3.8 Treasury Vesting Schedule
+
+<span class="cm">4. SECURITY ANALYSIS</span>
+   4.1 Threat Model
+   4.2 Sybil Resistance Analysis
+   4.3 Economic Attack Surfaces
+   4.4 Smart Contract Security
+   4.5 Operational Security
+
+<span class="cm">5. ECONOMIC MODEL</span>
+   5.1 Emission Curve
+   5.2 Scarcity Dynamics
+   5.3 Miner Economics (ROI model)
+   5.4 Comparative Analysis
+
+<span class="cm">6. GOVERNANCE</span>
+   6.1 Progressive Decentralization Plan
+   6.2 Multisig Structure
+   6.3 DAO Transition Criteria
+   6.4 Treasury Governance
+
+<span class="cm">7. CULTURAL CONTEXT</span>
+   7.1 Anti-Algorithmic Identity
+   7.2 The Mining Ritual
+   7.3 Artistic Layer Documentation
+   7.4 Community Philosophy
+
+<span class="cm">8. TECHNICAL APPENDIX</span>
+   A. Program Account Diagrams
+   B. Instruction Reference
+   C. Error Code Reference
+   D. Audit Reports (linked)
+   E. Deployment Transaction Hashes</pre></div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('nav button');
+  const labels = ['vision','architecture','contracts','mining','tokenomics','security','frontend','launch','governance','whitepaper'];
+  btns[labels.indexOf(id)]?.classList.add('active');
+}
+
+// Miner simulation
+let minerRunning = false;
+let minerInterval = null;
+let attempts = 0, found = 0, pending = 0;
+
+function startMiner() {
+  if (minerRunning) return;
+  minerRunning = true;
+  document.getElementById('btn-start').classList.add('active');
+  const out = document.getElementById('miner-out');
+  out.innerHTML = '';
+  addLine('// UNLEARNLOGIC miner starting...', 'hash-line');
+  addLine('// wallet: 7xKp...3mQr | epoch: 1 | diff: 20 bits', 'hash-line');
+  addLine('// challenge seed: 0xf3a9...', 'hash-line');
+  addLine('', '');
+
+  let tick = 0;
+  minerInterval = setInterval(() => {
+    tick++;
+    const hashesPerTick = Math.floor(Math.random() * 800 + 200);
+    attempts += hashesPerTick;
+
+    if (tick % 3 === 0) {
+      const h = fakeHash();
+      const zeros = Math.floor(Math.random() * 19);
+      addLine(`nonce:${attempts.toString().padStart(8,'0')} hash:${h} zeros:${zeros}`, 'hash-line');
+    }
+
+    if (Math.random() < 0.04) {
+      found++;
+      pending = +(pending + (Math.random() * 0.3 + 0.1)).toFixed(2);
+      addLine(`✓ PROOF FOUND nonce:${attempts} zeros:20+ → submitting...`, 'found');
+    }
+
+    document.getElementById('m-hashrate').textContent = (hashesPerTick * 1000 / 100).toFixed(0);
+    document.getElementById('m-attempts').textContent = attempts.toLocaleString();
+    document.getElementById('m-found').textContent = found;
+    document.getElementById('m-pending').textContent = pending.toFixed(2);
+
+    if (out.children.length > 40) out.removeChild(out.firstChild);
+    out.scrollTop = out.scrollHeight;
+  }, 100);
+}
+
+function stopMiner() {
+  minerRunning = false;
+  clearInterval(minerInterval);
+  document.getElementById('btn-start').classList.remove('active');
+  addLine('// mining paused', 'hash-line');
+  document.getElementById('m-hashrate').textContent = '0';
+}
+
+function claimSim() {
+  if (pending <= 0) { addLine('// no pending rewards', 'err'); return; }
+  addLine(`// claiming ${pending.toFixed(2)} UNL → wallet...`, 'found');
+  setTimeout(() => {
+    addLine(`// ✓ claimed | tx: ${fakeHash().slice(0,20)}...`, 'found');
+    pending = 0;
+    document.getElementById('m-pending').textContent = '0.00';
+  }, 800);
+}
+
+function addLine(text, cls) {
+  const out = document.getElementById('miner-out');
+  if (!out) return;
+  const d = document.createElement('div');
+  d.className = cls;
+  d.textContent = text;
+  out.appendChild(d);
+  out.scrollTop = out.scrollHeight;
+}
+
+function fakeHash() {
+  return Array.from({length:16},()=>Math.floor(Math.random()*256).toString(16).padStart(2,'0')).join('');
+}
+</script>
+</body>
+</html>
